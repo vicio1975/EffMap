@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
 """
+Created on Fri Jul 27 14:37:23 2018
+
+@author: bmusammartanoV
+"""
+
+# -*- coding: utf-8 -*-
+"""
 Created on Thu Jul 26 11:53:08 2018
 
 @author: bmusammartanoV
@@ -9,9 +16,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 plt.style.use('seaborn-white')
 from scipy import interpolate
-from mpl_toolkits.mplot3d import axes3d, Axes3D #<-- Note the capitalization! 
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-from matplotlib import cm
+from scipy.interpolate import griddata
+
+
 
 #import os
 #import shutil
@@ -61,36 +68,31 @@ plt.ioff()
 ngridx = 300
 ngridy = 300
 
+#interpolation
 xp = np.asarray(Q) 
 yp = np.asarray(TotP)
 zp = np.asarray(EffStat)
-zp = zp.reshape(ql,len(omega_))
+#zp = zp.reshape(ql,len(omega_))
 
-f = interpolate.interp2d(xp,yp,zp, kind='cubic')
-x1 = np.linspace(min(Q),max(Q),ngridx)
-y1 = np.linspace(1500,max(TotP),ngridy)
-z1 = f(x1,y1)
-CP = plt.contour(x1, y1, z1,20,cmap=colormaps[0])
-plt.clabel(CP, inline=1, fontsize=10, fontcolor="black")
-plt.show(fig1)
+x1 = np.linspace(min(xp),max(xp),ngridx)
+y1 = np.linspace(1500,max(yp),ngridy)
 
-fig2 = plt.figure()
-ax = plt.axes(projection='3d')
-#ax.contour3D(x1, y1, z1 , 50, cmap='binary')
-#ax.contourf(x1, y1, z1 , 10, cmap=colormaps[1])
-#ax.plot_surface(x1, y1, z1 , 10, cmap=colormaps[1])
-surf = ax.contour3D(x1, y1, z1 , 200, cmap=colormaps[1])
+fig2 = plt.figure(figsize=plt.figaspect(0.5))
 
-ax.set_xlabel('Q(cms)')
-ax.set_ylabel('Total Pressure(Pa)')
-ax.set_zlabel('Eff(-)');
-fig2.colorbar(surf, shrink=0.2, aspect=4)
+ax = fig2.add_subplot(1, 2, 1, projection='3d')
 
-ax.set_zlim(0, 1)
-ax.zaxis.set_major_locator(LinearLocator(10))
-ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+z1 = griddata((xp, yp), zp, (x1[None,:], y1[None,:]), method='cubic')
 
+CS = plt.contour(x1,y1,z1,15,linewidths=0.5,color='k')
+ax = fig2.add_subplot(1, 2, 2, projection='3d')
+
+xig, yig = np.meshgrid(x1, y1)
+
+surf = ax.plot_surface(xig, yig, z1,
+        linewidth=0)
 plt.show(fig2)
+
+
 
 """
 cmaps = [('Perceptually Uniform Sequential', [
