@@ -76,9 +76,6 @@ plt.show(fig1)
 
 fig2 = plt.figure()
 ax = plt.axes(projection='3d')
-#ax.contour3D(x1, y1, z1 , 50, cmap='binary')
-#ax.contourf(x1, y1, z1 , 10, cmap=colormaps[1])
-#ax.plot_surface(x1, y1, z1 , 10, cmap=colormaps[1])
 surf = ax.contour3D(x1, y1, z1 , 200, cmap=colormaps[1])
 
 ax.set_xlabel('Q(cms)')
