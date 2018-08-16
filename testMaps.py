@@ -60,6 +60,7 @@ for n,j in enumerate(omega_):
 plt.ioff()
 ngridx = 300
 ngridy = 300
+aax = plt.axes()
 
 xp = np.asarray(Q) 
 yp = np.asarray(TotP)
@@ -72,6 +73,8 @@ y1 = np.linspace(1500,max(TotP),ngridy)
 z1 = f(x1,y1)
 CP = plt.contour(x1, y1, z1,20,cmap=colormaps[0])
 plt.clabel(CP, inline=1, fontsize=10, fontcolor="black")
+aax.set_xlabel('Q(cms)')
+aax.set_ylabel('Total Pressure(Pa)')
 plt.show(fig1)
 
 fig2 = plt.figure()
